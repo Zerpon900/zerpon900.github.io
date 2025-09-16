@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8">
+  <title>Véletlenszám-generátor extra funkciókkal</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f7f9;
+      padding: 20px;
+    }
+    h1 {
+      color: #1a237e;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+    input[type="number"] {
+      width: 80px;
+      padding: 5px;
+      margin-left: 10px;
+    }
+    .options {
+      margin-top: 10px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #fbc02d;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #f9a825;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Véletlenszám-generátor extra funkciókkal</h1>
+
+  <label>
+    A legkisebb szám, ami még szóba jöhet:* 
+    <input type="number" id="min" value="1">
+  </label>
+  <label>
+    A legnagyobb szám, ami még szóba jöhet:* 
+    <input type="number" id="max" value="30">
+  </label>
+  <label>
+    Hány véletlenszámot generáljunk? 
+    <input type="number" id="count" value="1">
+  </label>
+
+  <div class="options">
+    Ismétlődés engedélyezett? 
+    <label><input type="radio" name="duplicate" value="no" checked> Nem</label>
+    <label><input type="radio" name="duplicate" value="yes"> Igen</label>
+  </div>
+
+  <div class="options">
+    Sorbarendezzük a számokat? 
+    <label><input type="radio" name="sort" value="no" checked> Nem</label>
+    <label><input type="radio" name="sort" value="yes"> Igen</label>
+  </div>
+
+  <button onclick="generateNumbers()">GENERÁL</button>
+
+  <div class="result">
+    A generátor által készített random számok: 
+    <span id="output"></span>
+  </div>
+
+  <script>
+    function generateNumbers() {
+      const min = parseInt(document.getElementById('min').value);
+      const max = parseInt(document.getElementById('max').value);
+      const count = parseInt(document.getElementById('count').value);
+
+      const allowDuplicates = document.querySelector('input[name="duplicate"]:checked').value === "yes";
+      const sortNumbers = document.querySelector('input[name="sort"]:checked').value === "yes";
+
+      if (min >= max) {
+        alert("A legnagyobb számnak nagyobbnak kell lennie a legkisebbnél!");
+        return;
+      }
+
+      // Kizárt számok
+      const excluded = [14, 21];
+      let results = [];
+
+      while (results.length < count) {
+        let num = Math.floor(Math.random() * (max - min + 1)) + min;
+
+        if (excluded.includes(num)) {
+          continue; // ha tiltott szám, újrapróbálkozás
+        }
+
+        if (!allowDuplicates && results.includes(num)) {
+          continue; // ha ismétlődés nem engedélyezett
+        }
+
+        results.push(num);
+      }
+
+      if (sortNumbers) {
+        results.sort((a, b) => a - b);
+      }
+
+      document.getElementById("output").textContent = results.join(", ");
+    }
+  </script>
+
+</body>
+</html>
